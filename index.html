@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROYECTO FINAL TIC | CTA PARAGUAY - COREA</title>
+
+<style>
+@property --giro {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bordo: #800020;
+  --bordo-oscuro: #380d1c;
+  --bordo-claro: #ad3056;
+  --texto: #451426;
+  --fondo: #faf3f5;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(145deg, #fffafb, #f0e1e7);
+  color: var(--texto);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ENCABEZADO */
+
+header {
+  height: 13vh;
+  min-height: 88px;
+  flex-shrink: 0;
+  background: linear-gradient(
+    110deg,
+    var(--bordo-oscuro),
+    var(--bordo) 65%,
+    #a42c50
+  );
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4.5vw;
+  position: relative;
+  box-shadow: 0 4px 18px #530d252b;
+}
+
+header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    #b95170,
+    #ffe5c5,
+    #fff,
+    #ffe5c5,
+    #b95170
+  );
+}
+
+.brand small {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: #f5dce5;
+  margin-bottom: 5px;
+}
+
+.brand h1 {
+  font-size: clamp(20px, 2.15vw, 33px);
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.brand p {
+  font-size: clamp(10px, 1vw, 14px);
+  letter-spacing: 3px;
+  margin-top: 5px;
+}
+
+.home {
+  text-decoration: none;
+  display: block;
+  flex-shrink: 0;
+  margin-left: 15px;
+}
+
+.cta-logo {
+  display: block;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: contain;
+  background: #fff;
+  padding: 4px;
+  box-shadow: 0 0 0 4px #ffffff25, 0 5px 13px #0004;
+  transition: transform .25s ease;
+}
+
+.home:hover .cta-logo {
+  transform: scale(1.06);
+}
+
+/* TÍTULO */
+
+.heading {
+  height: 12vh;
+  min-height: 82px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.heading-wrap {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.line {
+  width: 11vw;
+  max-width: 180px;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--bordo));
+}
+
+.line.right {
+  background: linear-gradient(to right, var(--bordo), transparent);
+}
+
+.heading h2 {
+  font-size: clamp(21px, 2.45vw, 36px);
+  letter-spacing: 6px;
+  color: var(--bordo);
+}
+
+.heading p {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #936879;
+  margin-top: 7px;
+}
+
+/* CUADRÍCULA */
+
+.grid {
+  flex: 1;
+  min-height: 0;
+  width: min(1520px, 95vw);
+  margin: 0 auto 1.4vh;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+/* TARJETAS */
+
+.card {
+  --giro: 0deg;
+
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  min-height: 0;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  text-decoration: none;
+  color: inherit;
+  padding: 10px 12px 9px;
+
+  display: grid;
+  grid-template-rows: minmax(70px, 1fr) auto 25px;
+  align-items: center;
+
+  /*
+    La primera capa cubre el interior.
+    La segunda dibuja el brillo que gira por el borde.
+  */
+  background:
+    linear-gradient(145deg, #ffffff, #fff8fb) padding-box,
+    conic-gradient(
+      from var(--giro),
+      #d9b8c5 0deg,
+      #d9b8c5 235deg,
+      #ad3056 270deg,
+      #f3b8ce 295deg,
+      #fff8e9 315deg,
+      #e2a4bc 335deg,
+      #d9b8c5 360deg
+    ) border-box;
+
+  box-shadow: 0 5px 16px #530d2510;
+  animation: girar-brillo 5s linear infinite;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+/* Resplandor exterior que acompaña al borde. */
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  z-index: -1;
+  border: 3px solid transparent;
+  border-radius: 19px;
+  background:
+    conic-gradient(
+      from var(--giro),
+      transparent 0deg 260deg,
+      #bd577c55 285deg,
+      #ffd7e6aa 315deg,
+      transparent 345deg 360deg
+    ) border-box;
+
+  /* Mantiene el resplandor únicamente alrededor de la tarjeta. */
+  mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+
+  filter: blur(3px);
+  pointer-events: none;
+  animation: girar-brillo 5s linear infinite;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 26px #80002026;
+}
+
+.card:focus-visible {
+  outline: 3px solid var(--bordo);
+  outline-offset: 5px;
+}
+
+/* Diferentes tiempos de inicio para distribuir los brillos. */
+
+.card:nth-child(2),
+.card:nth-child(2)::before {
+  animation-delay: -.6s;
+}
+
+.card:nth-child(3),
+.card:nth-child(3)::before {
+  animation-delay: -1.2s;
+}
+
+.card:nth-child(4),
+.card:nth-child(4)::before {
+  animation-delay: -1.8s;
+}
+
+.card:nth-child(5),
+.card:nth-child(5)::before {
+  animation-delay: -2.4s;
+}
+
+.card:nth-child(6),
+.card:nth-child(6)::before {
+  animation-delay: -3s;
+}
+
+.card:nth-child(7),
+.card:nth-child(7)::before {
+  animation-delay: -3.6s;
+}
+
+.card:nth-child(8),
+.card:nth-child(8)::before {
+  animation-delay: -4.2s;
+}
+
+@keyframes girar-brillo {
+  to {
+    --giro: 360deg;
+  }
+}
+
+/* LOGOS */
+
+.logo-area {
+  height: 100%;
+  min-height: 65px;
+  max-height: 128px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 10px 3px;
+  overflow: hidden;
+}
+
+.logo-area img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 180px;
+  max-height: 115px;
+  object-fit: contain;
+  object-position: center;
+  transition: transform .3s ease;
+}
+
+.card:hover .logo-area img {
+  transform: scale(1.04);
+}
+
+.logo-fallback {
+  display: none;
+  width: 95px;
+  height: 95px;
+  max-height: 100%;
+  border-radius: 50%;
+  place-items: center;
+  text-align: center;
+  padding: 9px;
+  background: #f9eef3;
+  border: 2px solid #e9cbd7;
+  color: var(--bordo);
+  font-weight: 900;
+  font-size: 12px;
+}
+
+/* INFORMACIÓN */
+
+.project-info {
+  text-align: center;
+  padding: 2px 3px 6px;
+}
+
+.project-info span {
+  display: inline-block;
+  font-size: 9px;
+  color: var(--bordo);
+  font-weight: 900;
+  letter-spacing: 1.2px;
+  background: #f4e4eb;
+  padding: 4px 9px;
+  border-radius: 20px;
+}
+
+.project-info h3 {
+  font-size: clamp(13px, 1.15vw, 18px);
+  color: var(--bordo-oscuro);
+  margin: 6px 0 5px;
+  line-height: 1.12;
+  overflow-wrap: anywhere;
+}
+
+.project-info p {
+  font-size: clamp(9px, .73vw, 11px);
+  color: #795263;
+  font-weight: 700;
+  line-height: 1.25;
+  min-height: 13px;
+}
+
+.open {
+  align-self: end;
+  text-align: center;
+  font-size: 9px;
+  letter-spacing: .45px;
+  font-weight: 900;
+  color: var(--bordo);
+  border-top: 1px solid #efdee5;
+  padding-top: 7px;
+}
+
+.open b {
+  display: inline-block;
+  color: var(--bordo-claro);
+  font-size: 13px;
+  margin-left: 3px;
+  transition: transform .25s ease;
+}
+
+.card:hover .open b {
+  transform: translateX(4px);
+}
+
+/* PIE DE PÁGINA */
+
+footer {
+  height: 4vh;
+  min-height: 29px;
+  flex-shrink: 0;
+  background: var(--bordo-oscuro);
+  color: #f8e9ef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  padding: 0 12px;
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+footer i {
+  flex-shrink: 0;
+  width: 42px;
+  height: 2px;
+  background: linear-gradient(to right, #a44464, #ffe5c5, #a44464);
+}
+
+/* TABLETAS */
+
+@media (max-width: 900px) {
+  html,
+  body {
+    height: auto;
+    min-height: 100%;
+    overflow: auto;
+  }
+
+  header {
+    min-height: 100px;
+  }
+
+  .grid {
+    flex: none;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .card {
+    min-height: 240px;
+  }
+
+  .heading-wrap .line {
+    display: none;
+  }
+
+  .heading h2 {
+    letter-spacing: 3px;
+  }
+
+  footer {
+    min-height: 42px;
+  }
+}
+
+/* CELULARES */
+
+@media (max-width: 480px) {
+  header {
+    padding: 14px 5vw;
+  }
+
+  .brand small {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+
+  .brand h1 {
+    font-size: 16px;
+    line-height: 1.25;
+  }
+
+  .brand p {
+    font-size: 9px;
+    letter-spacing: 2px;
+  }
+
+  .cta-logo {
+    width: 54px;
+    height: 54px;
+  }
+
+  .heading {
+    min-height: 90px;
+  }
+
+  .heading h2 {
+    font-size: 21px;
+    letter-spacing: 2px;
+  }
+
+  .heading p {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+
+  .grid {
+    width: 92vw;
+    gap: 12px;
+  }
+
+  .card {
+    padding: 9px 7px;
+    min-height: 230px;
+  }
+
+  .project-info h3 {
+    font-size: 13px;
+  }
+
+  .project-info p {
+    font-size: 9px;
+  }
+
+  .open {
+    font-size: 8px;
+    letter-spacing: 0;
+  }
+
+  footer {
+    font-size: 8px;
+    letter-spacing: 1px;
+    gap: 8px;
+  }
+
+  footer i {
+    width: 20px;
+  }
+}
+
+/* RESPETA LA PREFERENCIA DE MOVIMIENTO DEL DISPOSITIVO. */
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .card::before {
+    animation: none;
+    --giro: 315deg;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">
+    <small>EDUCACIÓN · TECNOLOGÍA · INNOVACIÓN</small>
+    <h1>CENTRO TECNOLÓGICO DE AVANZADA</h1>
+    <p>PARAGUAY - COREA</p>
+  </div>
+
+  <a class="home" href="index.html" title="VOLVER AL INICIO">
+    <img class="cta-logo" src="ctalogo.png" alt="LOGO CTA">
+  </a>
+</header>
+
+<section class="heading">
+  <div class="heading-wrap">
+    <div class="line"></div>
+
+    <div>
+      <h2>PROYECTO FINAL TIC</h2>
+      <p>PRESENTACIÓN DE PROYECTOS · 2026</p>
+    </div>
+
+    <div class="line right"></div>
+  </div>
+</section>
+
+<main class="grid">
+
+  <!-- 01 · BRYAN -->
+  <a class="card" href="FLETEX_Defensa.html">
+    <div class="logo-area">
+      <img src="bryan.png" alt="LOGO FLETEX"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='grid';">
+      <div class="logo-fallback">FLETEX</div>
+    </div>
+
+    <div class="project-info">
+      <span>PROYECTO 01</span>
+      <h3>FLETEX</h3>
+      <p>BRYAN PRIETO</p>
+    </div>
+
+    <div class="open">ABRIR PRESENTACIÓN <b>→</b></div>
+  </a>
+
+  <!-- 02 · FERNANDO Y ÁNGEL -->
+  <a class="card" href="SICOPP_PRE_DEFENSA.html">
+    <div class="logo-area">
+      <img src="logo SICOPP.jpeg" alt="LOGO SICOPP"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='grid';">
+      <div class="logo-fallback">SICOPP</div>
+    </div>
+
+    <div class="project-info">
+      <span>PROYECTO 02</span>
+      <h3>SICOPP</h3>
+      <p>FERNANDO OJEDA · ÁNGEL ROMERO</p>
+    </div>
+
+    <div class="open">ABRIR PRESENTACIÓN <b>→</b></div>
+  </a>
+
+  <!-- 03 · MIRIAN -->
+  <a class="card" href="geocontrol (1).html">
+    <div class="logo-area">
+      <img src="mirian.png" alt="LOGO GEOCONTROL"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='grid';">
+      <div class="logo-fallback">GEOCONTROL</div>
+    </div>
+
+    <div class="project-info">
+      <span>PROYECTO 03</span>
+      <h3>GEOCONTROL</h3>
+      <p>MIRIAN CÁCERES</p>
+    </div>
+
+    <div class="open">ABRIR PRESENTACIÓN <b>→</b></div>
+  </a>
+
+  <!-- 04 · CARMEN Y GUSTAVO -->
+  <a class="card" href="pre-defensa-divsa.html">
+    <div class="logo-area">
+      <img src="divsa.png" alt="LOGO DIVSA"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='grid';">
+      <div class="logo-fallback">DIVSA</div>
+    </div>
+
+    <div class="project-info">
+      <span>PROYECTO 04</span>
+      <h3>DIVSA</h3>
+      <p>CARMEN MOLINAS · GUSTAVO LARRIERA</p>
+    </div>
+
+    <div class="open">ABRIR PRESENTACIÓN <b>→</b></div>
+  </a>
+
+  <!-- 05 · DIEGO -->
+  <a class="card" href="diegof-predefensa.html">
+    <div class="logo-area">
+      <img src="diego.jpg" alt="LOGO DIF-SENTINEL"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='grid';">
+      <div class="logo-fallback">DIF-SENTINEL</div>
+    </div>
+
+    <div class="project-info">
+      <span>PROYECTO 05</span>
+      <h3>DIF-SENTINEL</h3>
+      <p>DIEGO FERREIRA</p>
+    </div>
+
+    <div class="open">ABRIR PRESENTACIÓN <b>→</b></div>
+  </a>
+
+  <!-- 06 · TANIA -->
+  <a class="card" href="arandutrack.html">
+    <div class="logo-area">
+      <img src="tania.png" alt="LOGO ARANDUTRACK"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='grid';">
+      <div class="logo-fallback">ARANDUTRACK</div>
+    </div>
+
+    <div class="project-info">
+      <span>PROYECTO 06</span>
+      <h3>ARANDUTRACK</h3>
+      <p>TANIA VILLALBA</p>
+    </div>
+
+    <div class="open">ABRIR PRESENTACIÓN <b>→</b></div>
+  </a>
+
+  <!-- 07 · SARA -->
+  <a class="card" href="presentacionSIC.html">
+    <div class="logo-area">
+      <img src="sara.jpeg" alt="LOGO S.I.C. (SOPORTE INDUSTRIAL CÁRNICO)"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='grid';">
+      <div class="logo-fallback">S.I.C.</div>
+    </div>
+
+    <div class="project-info">
+      <span>PROYECTO 07</span>
+      <h3>S.I.C. (SISTEMA INDUSTRIAL CÁRNICO)</h3>
+      <p>SARA DOMÍNGUEZ</p>
+    </div>
+
+    <div class="open">ABRIR PRESENTACIÓN <b>→</b></div>
+  </a>
+
+  <!-- 08 · HERNÁN -->
+  <a class="card" href="guappo.html">
+    <div class="logo-area">
+      <img src="guappo.png" alt="LOGO GUAPPO"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='grid';">
+      <div class="logo-fallback">GUAPPO</div>
+    </div>
+
+    <div class="project-info">
+      <span>PROYECTO 08</span>
+      <h3>GUAPPO</h3>
+      <p>HERNÁN ORTIZ</p>
+    </div>
+
+    <div class="open">ABRIR PRESENTACIÓN <b>→</b></div>
+  </a>
+
+</main>
+
+<footer>
+  <i></i>
+  CENTRO TECNOLÓGICO DE AVANZADA · PARAGUAY - COREA
+  <i></i>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pre-Defensa CTA - Sistema Biométrico</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+:root {
+  --azul-oscuro: #02080f;
+  --azul-card: rgba(10, 15, 25, 0.9);
+  --lila-principal: #4225a3;
+  --lila-brillante: #6366f1;
+  --texto-claro: #f8fafc;
+  --texto-secundario: #94a3b8;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-glow: rgba(99, 102, 241, 0.3);
+  --rojo-portada: #c00000;
+  --verde-portada: #e2efda;
+  --azul-texto-portada: #1f3864;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0; width: 100%; height: 100%; overflow: hidden;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(135deg, #02080f, #0b1f2a, #12384a);
+  color: var(--texto-claro);
+}
+
+.slide {
+  display: none; width: 100vw; height: 100vh; overflow: hidden; position: relative;
+  background: linear-gradient(135deg, #02080f, #0b1f2a, #12384a);
+  color: white;
+}
+
+.slide.active { display: block; }
+
+/* CABECERA BLANCA */
+.cabecera {
+  height: 16vh; min-height: 90px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 5.4vw;
+  background: #ffffff;
+  border-bottom: 3px solid var(--lila-principal);
+}
+
+.logos-gob {
+  width: min(38vw, 500px); height: 11vh; object-fit: contain; object-position: left center;
+  background: #ffffff;
+}
+
+.logo-cta {
+  width: min(10vw, 130px); height: 12vh; object-fit: contain; object-position: right center;
+  background: #ffffff;
+}
+
+/* PORTADA (fondo blanco, banda roja y banda verde clara) */
+.portada { background: #ffffff; color: var(--azul-texto-portada); }
+.portada .cabecera { border-bottom: none; }
+
+.portada .franja-principal {
+  position: absolute;
+  left: 6.8vw; right: 6.8vw; top: 24vh;
+  background: var(--rojo-portada);
+  border-radius: 0;
+  display: flex; align-items: center; justify-content: center;
+  padding: 2.5vh 4vw;
+  border: none; box-shadow: none;
+}
+
+.portada .franja-principal h1 {
+  color: #fff; margin: 0; text-align: center; font-weight: 700;
+  font-size: clamp(22px, 2.5vw, 42px); line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.portada .franja-secundaria {
+  position: absolute;
+  left: 6.8vw; right: 6.8vw; top: 46vh;
+  min-height: 22vh;
+  background: var(--verde-portada);
+  border: none; border-radius: 0; box-shadow: none; backdrop-filter: none;
+  display: flex; align-items: center; justify-content: center;
+  padding: 2.5vh 3vw;
+}
+
+.portada .franja-secundaria h2 {
+  margin: 0; max-width: 1200px; text-align: center;
+  color: var(--azul-texto-portada); font-weight: 500;
+  font-size: clamp(20px, 2.3vw, 38px); line-height: 1.3;
+}
+
+.fecha {
+  position: absolute; left: 7.5vw; bottom: 10vh;
+  color: var(--azul-texto-portada); font-size: clamp(13px, 1.1vw, 16px); font-weight: bold;
+}
+
+/* DIAPOSITIVAS INTERNAS */
+.titulo-seccion {
+  margin: 2vh 6.8vw 0;
+  height: 7.5vh; min-height: 50px;
+  background: linear-gradient(90deg, #4225a3, #21115b);
+  color: #fff; border-radius: 16px;
+  border: 1px solid var(--border-glow);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; text-align: center;
+  font-size: clamp(20px, 2.2vw, 32px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.contenido {
+  height: 64vh;
+  padding: 3vh 7vw 4vh;
+  display: flex; flex-direction: column; justify-content: center;
+}
+
+.texto-principal {
+  border-left: 6px solid var(--lila-brillante);
+  background: var(--azul-card);
+  border-radius: 0 20px 20px 0;
+  padding: 3.5vh 3vw;
+  font-size: clamp(18px, 2.1vw, 32px);
+  line-height: 1.45; color: var(--texto-claro); font-weight: 500;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  border-top: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  backdrop-filter: blur(10px);
+}
+
+.texto-principal.justificacion {
+  font-size: clamp(15px, 1.5vw, 24px);
+  line-height: 1.5;
+}
+
+/* DEMOSTRACIÓN */
+.demo-container {
+  position: relative;
+  height: 48vh;
+  background: var(--azul-card);
+  border: 1px dashed var(--lila-brillante);
+  border-radius: 25px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 20px; text-align: center;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+  backdrop-filter: blur(10px);
+}
+
+.demo-logo {
+  position: absolute;
+  left: 4vw; top: 50%;
+  transform: translateY(-50%);
+  max-width: 17vw; max-height: 30vh;
+  width: auto; height: auto;
+  object-fit: contain;
+}
+
+.btn-demo-estiloso {
+  background: linear-gradient(135deg, #4225a3, #2a146e);
+  color: white; border: 1px solid rgba(255,255,255,0.2);
+  padding: 18px 40px; border-radius: 35px;
+  font-size: clamp(18px, 1.8vw, 24px); font-weight: bold;
+  cursor: pointer; text-decoration: none; display: inline-flex;
+  align-items: center; gap: 12px;
+  box-shadow: 0 10px 30px rgba(66, 37, 163, 0.5);
+  transition: all 0.3s ease;
+}
+
+.btn-demo-estiloso:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 15px 40px rgba(99, 102, 241, 0.7);
+  color: white; text-decoration: none;
+  background: linear-gradient(135deg, #4f2dbd, #321980);
+}
+
+/* HERRAMIENTAS POR SECCIONES */
+.secciones-tools {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 2vw; margin-top: 1vh;
+}
+
+.seccion-box {
+  background: var(--azul-card);
+  border: 1px solid var(--border-color);
+  border-radius: 20px; padding: 22px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.seccion-box h3 {
+  margin: 0 0 18px; color: var(--lila-brillante);
+  font-size: clamp(18px, 1.4vw, 22px); text-align: center;
+  border-bottom: 2px solid var(--lila-principal); padding-bottom: 8px;
+  text-transform: uppercase; letter-spacing: 1px;
+}
+
+.grid-tools {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 14px;
+}
+
+.tool-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-color);
+  border-radius: 15px; padding: 14px 8px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; transition: 0.3s;
+}
+
+.tool-card:hover {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: var(--lila-brillante);
+  transform: translateY(-3px);
+}
+
+.tool-card i {
+  font-size: 28px; color: var(--lila-brillante); margin-bottom: 8px;
+}
+
+.tool-card span {
+  font-size: 13px; font-weight: bold; color: var(--texto-claro);
+}
+
+/* PIE BLANCO Y NAVEGACIÓN */
+.pie {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 8vh; min-height: 48px;
+  padding: 0 7vw;
+  background: #ffffff;
+  border-top: 3px solid var(--lila-principal);
+  display: flex; align-items: center; justify-content: space-between;
+  color: #1f2937; font-size: 14px; font-weight: bold;
+}
+
+.portada .pie { border-top: none; }
+
+.nav { display: flex; gap: 10px; }
+
+.nav button, .volver {
+  border: none; background: linear-gradient(30deg, #4225a3, #000738);
+  color: white; padding: 8px 20px; border-radius: 20px;
+  font-weight: 700; cursor: pointer; text-decoration: none;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: 0.3s;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.nav button:hover, .volver:hover {
+  transform: scale(1.05); background: linear-gradient(30deg, #5330c6, #000c59);
+  color: white;
+}
+
+/* SOBRE MÍ */
+.sobre-mi-wrap {
+  height: 63vh; padding: 2vh 6.8vw 3vh;
+  display: grid; grid-template-columns: 1.05fr 1.55fr; gap: 2vw;
+}
+
+.perfil-col { display: flex; flex-direction: column; gap: 15px; }
+
+.proyecto-mini {
+  color: var(--lila-brillante); font-size: clamp(13px, 1.15vw, 17px);
+  line-height: 1.35; font-weight: bold; background: var(--azul-card);
+  padding: 12px 18px; border-radius: 15px; border: 1px solid var(--border-glow);
+}
+
+.ficha-personal {
+  display: grid; grid-template-columns: 110px 1fr; gap: 15px;
+  background: var(--azul-card); padding: 18px; border-radius: 20px;
+  border: 1px solid var(--border-color);
+}
+
+.foto-placeholder {
+  width: 110px; height: 140px; border-radius: 12px;
+  border: 1px dashed var(--lila-brillante); background: rgba(255,255,255,0.03);
+  display: grid; place-items: center; color: var(--texto-secundario); font-size: 12px; font-weight: bold;
+}
+.foto-placeholder {
+  overflow: hidden;
+}
+
+.foto-placeholder img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 11px;
+}
+
+.datos h3 { margin: 0 0 4px; color: var(--lila-brillante); font-size: 15px; text-transform: uppercase; }
+.datos .nombre { font-size: 18px; color: #fff; font-weight: 800; line-height: 1.2; }
+.datos p { margin: 3px 0; font-size: 12px; color: #cbd5e1; line-height: 1.3; }
+.mini-titulo { color: var(--lila-brillante); font-size: 12px; font-weight: bold; margin: 6px 0 2px; text-transform: uppercase; }
+
+.detalle-col { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+.bloque {
+  background: var(--azul-card); border-radius: 18px; padding: 15px;
+  border: 1px solid var(--border-color); border-top: 3px solid var(--lila-brillante);
+}
+
+.bloque h4 { margin: 0 0 8px; color: var(--lila-brillante); font-size: 13px; text-transform: uppercase; }
+.bloque p, .bloque li { font-size: 12px; color: #cbd5e1; line-height: 1.35; margin: 2px 0; }
+
+.tech-chip {
+  background: rgba(66, 37, 163, 0.4); border: 1px solid var(--border-glow);
+  color: #e2e8f0; padding: 5px 10px; border-radius: 10px; font-size: 11px;
+  font-weight: bold; display: inline-block; margin: 3px 2px;
+}
+
+.skill-line {
+  display: grid; grid-template-columns: 120px 1fr; gap: 8px;
+  align-items: center; margin: 6px 0; font-size: 11px; color: #e2e8f0;
+}
+
+.bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: linear-gradient(90deg, #4225a3, #6366f1); }
+
+.final .contenido { align-items: center; text-align: center; }
+.final .gracias { font-size: clamp(38px, 4.8vw, 76px); font-weight: 800; color: #fff; margin: 0; }
+.final .volver { margin-top: 4vh; background: linear-gradient(135deg, #4225a3, #2a146e); color: white; padding: 14px 32px; border-radius: 30px; font-size: 18px; }
+
+@media(max-width:900px){
+  .sobre-mi-wrap { grid-template-columns: 1fr; overflow-y: auto; }
+  .secciones-tools { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: PORTADA -->
+<section class="slide portada active">
+  <header class="cabecera">
+    <img class="logos-gob" src="logos_institucionales.png" alt="Ministerio de Trabajo y SNPP">
+    <img class="logo-cta" src="ctalogo.png" alt="CTA Paraguay Corea">
+  </header>
+  <div class="franja-principal">
+    <h1>ÁREA DE TECNOLOGÍA DE LA INFORMACIÓN Y LA COMUNICACIÓN</h1>
+  </div>
+  <div class="franja-secundaria">
+    <h2>PRESENTACIÓN DE PROYECTO FINAL DE CARRERA DEL TÉCNICO SUPERIOR EN TIC, EN DESARROLLO DE SISTEMAS INFORMÁTICO</h2>
+  </div>
+  <div class="fecha">01/10/2026</div>
+  <div class="pie">
+    <span></span>
+    <div class="nav"><button onclick="next()">SIGUIENTE →</button></div>
+  </div>
+</section>
+
+<!-- SLIDE 2: SOBRE MÍ Y EL PROYECTO -->
+<section class="slide interna">
+ <header class="cabecera"><img class="logos-gob" src="logos_institucionales.png"><img class="logo-cta" src="ctalogo.png"></header>
+ <div class="titulo-seccion">SOBRE MÍ Y EL PROYECTO</div>
+
+ <main class="sobre-mi-wrap">
+   <section class="perfil-col">
+     <div class="proyecto-mini">
+        PROYECTO: SISTEMA WEB DE CONTROL DE ASISTENCIA MEDIANTE RECONOCIMIENTO FACIAL Y GESTIÓN DE SALARIOS 
+     </div>
+
+     <div class="ficha-personal">
+       <div>
+  <div class="foto-placeholder">
+    <img src="img/diegofoto.jpg" alt="Foto de Diego">
+  </div>
+</div>
+
+
+       <div class="datos">
+         <h3>Presentado por:</h3>
+         <div class="nombre">DIEGO MATÍAS<br>FERREIRA INSFRÁN</div>
+
+         <div class="mini-titulo">Estudiante</div>
+         <p>Técnico Superior en TIC en Desarrollo de Sistemas Informáticos.</p>
+
+         <div class="mini-titulo">Contacto</div>
+         <p>+595 982075379</p>
+         <p>diegoferreiraaa06@gmail.com</p>
+         <p>Ypacaraí - Paraguay</p>
+
+         <div class="mini-titulo">Presentación personal</div>
+         <p>Soy Diego Ferreira, alumno del 4to semestre de la carrera de "TIC".</p>
+       </div>
+     </div>
+   </section>
+
+   <section class="detalle-col">
+     <div class="bloque">
+       <h4>FORMACIÓN ACADÉMICA</h4>
+       <p><b>2018 – 2023</b> · Colegio privado subvencionado Don Bosco de Ypacaraí.</p>
+
+       <h4 style="margin-top:12px">HABILIDADES Y DESTREZAS</h4>
+       <div class="skill-line"><span>Informática / Programación</span><div class="bar"><i style="width:100%"></i></div></div>
+       <div class="skill-line"><span>Ofimática</span><div class="bar"><i style="width:100%"></i></div></div>
+       <div class="skill-line"><span>Inglés</span><div class="bar"><i style="width:40%"></i></div></div>
+     </div>
+
+     <div class="bloque">
+       <h4>TECNOLOGÍAS DEL PROYECTO</h4>
+       <div>
+         <span class="tech-chip">JAVA</span>
+         <span class="tech-chip">JAVA WEB JSP</span>
+         <span class="tech-chip">HTML5 / CSS3</span>
+         <span class="tech-chip">JAVASCRIPT</span>
+         <span class="tech-chip">POSTGRESQL (NEON)</span>
+         <span class="tech-chip">BOOTSTRAP 4</span>
+       </div>
+
+       <h4 style="margin-top:10px">OTRAS HERRAMIENTAS</h4>
+       <p>Asana · Trello · Jira · Gantt Project · Start UML</p>
+
+       <h4 style="margin-top:10px">EXPERIENCIA</h4>
+       <p>Experiencia en desarrollo de software y áreas afines.</p>
+     </div>
+
+     <div class="bloque" style="grid-column: 1 / -1;">
+       <h4>IDIOMAS</h4>
+       <p><b>Español:</b> Habla, lectura y escritura &nbsp;|&nbsp; <b>Guaraní:</b> Habla, lectura y escritura &nbsp;|&nbsp; <b>Inglés:</b> Habla, lectura y escritura</p>
+     </div>
+   </section>
+ </main>
+
+ <div class="pie"><span>02 / 10</span><div class="nav"><button onclick="prev()">←</button><button onclick="next()">→</button></div></div>
+</section>
+
+<!-- SLIDE 3: PLANTEAMIENTO DEL PROBLEMA -->
+<section class="slide interna">
+ <header class="cabecera"><img class="logos-gob" src="logos_institucionales.png"><img class="logo-cta" src="ctalogo.png"></header>
+ <div class="titulo-seccion">PLANTEAMIENTO DEL PROBLEMA</div>
+ <main class="contenido">
+   <div class="texto-principal">
+     El problema central radica en que los dispositivos biométricos tradicionales operan como sistemas cerrados y aislados que no se conectan con plataformas web ni con la administración financiera, lo que desconecta el registro de asistencia del cálculo salarial y obliga a realizar procesos manuales propensos a errores humanos; por ello, este sistema web unifica la autenticación biométrica en tiempo real con la gestión automatizada de salarios para optimizar el control de personal y agilizar la emisión de planillas.
+   </div>
+ </main>
+ <div class="pie"><span>03 / 10</span><div class="nav"><button onclick="prev()">←</button><button onclick="next()">→</button></div></div>
+</section>
+
+<!-- SLIDE 4: PREGUNTA GENERAL -->
+<section class="slide interna">
+ <header class="cabecera"><img class="logos-gob" src="logos_institucionales.png"><img class="logo-cta" src="ctalogo.png"></header>
+ <div class="titulo-seccion">PREGUNTA GENERAL</div>
+ <main class="contenido">
+   <div class="texto-principal">
+     ¿De qué manera un sistema web integrado con autenticación biométrica y gestión salarial automatizada optimiza el control de asistencia, elimina los errores administrativos y garantiza la seguridad en el procesamiento de planillas del personal?
+   </div>
+ </main>
+ <div class="pie"><span>04 / 10</span><div class="nav"><button onclick="prev()">←</button><button onclick="next()">→</button></div></div>
+</section>
+
+<!-- SLIDE 5: OBJETIVO GENERAL -->
+<section class="slide interna">
+ <header class="cabecera"><img class="logos-gob" src="logos_institucionales.png"><img class="logo-cta" src="ctalogo.png"></header>
+ <div class="titulo-seccion">OBJETIVO GENERAL</div>
+ <main class="contenido">
+   <div class="texto-principal">
+     Desarrollar e implementar un sistema web integrado con autenticación biométrica y gestión automatizada de salarios para optimizar el control de accesos, garantizar la precisión en el registro de asistencia y agilizar el procesamiento de planillas del personal.
+   </div>
+ </main>
+ <div class="pie"><span>05 / 10</span><div class="nav"><button onclick="prev()">←</button><button onclick="next()">→</button></div></div>
+</section>
+
+<!-- SLIDE 6: JUSTIFICACIÓN -->
+<section class="slide interna">
+ <header class="cabecera"><img class="logos-gob" src="logos_institucionales.png"><img class="logo-cta" src="ctalogo.png"></header>
+ <div class="titulo-seccion">JUSTIFICACIÓN</div>
+ <main class="contenido">
+   <div class="texto-principal justificacion">
+     La implementación de este sistema se justifica técnica, operativa y económicamente porque integra una plataforma web moderna con autenticación biométrica y una base de datos segura para superar las limitaciones de los dispositivos aislados tradicionales, automatiza el cálculo de asistencia y su relación directa con la gestión de salarios eliminando errores manuales y agilizando la emisión de planillas, y garantiza la precisión en el registro del personal para erradicar la suplantación de identidad y optimizar el tiempo administrativo de la institución.
+   </div>
+ </main>
+ <div class="pie"><span>06 / 10</span><div class="nav"><button onclick="prev()">←</button><button onclick="next()">→</button></div></div>
+</section>
+
+<!-- SLIDE 7: HERRAMIENTAS UTILIZADAS -->
+<section class="slide interna">
+ <header class="cabecera"><img class="logos-gob" src="logos_institucionales.png"><img class="logo-cta" src="ctalogo.png"></header>
+ <div class="titulo-seccion">HERRAMIENTAS UTILIZADAS</div>
+ <main class="contenido">
+  <div class="secciones-tools">
+    
+    <!-- FRONTEND -->
+    <div class="seccion-box">
+      <h3><i class="fas fa-desktop mr-2"></i> Frontend</h3>
+      <div class="grid-tools">
+        <div class="tool-card"><i class="fab fa-html5"></i><span>HTML5</span></div>
+        <div class="tool-card"><i class="fab fa-css3-alt"></i><span>CSS3</span></div>
+        <div class="tool-card"><i class="fab fa-js"></i><span>JavaScript</span></div>
+        <div class="tool-card"><i class="fab fa-bootstrap"></i><span>Bootstrap 4</span></div>
+      </div>
+    </div>
+
+    <!-- BACKEND & BASE DE DATOS -->
+    <div class="seccion-box">
+      <h3><i class="fas fa-server mr-2"></i> Backend & BD</h3>
+      <div class="grid-tools">
+        <div class="tool-card"><i class="fab fa-java"></i><span>Java</span></div>
+        <div class="tool-card"><i class="fas fa-code"></i><span>JSP (Servlets)</span></div>
+        <div class="tool-card"><i class="fas fa-database"></i><span>PostgreSQL</span></div>
+        <div class="tool-card"><i class="fas fa-cloud"></i><span>Neon Cloud</span></div>
+      </div>
+    </div>
+
+  </div>
+ </main>
+ <div class="pie"><span>07 / 10</span><div class="nav"><button onclick="prev()">←</button><button onclick="next()">→</button></div></div>
+</section>
+
+<!-- SLIDE 8: DEMOSTRACIÓN DEL SISTEMA -->
+<section class="slide interna">
+ <header class="cabecera"><img class="logos-gob" src="logos_institucionales.png"><img class="logo-cta" src="ctalogo.png"></header>
+ <div class="titulo-seccion">DEMOSTRACIÓN DEL SISTEMA</div>
+ <main class="contenido">
+    <div class="demo-container">
+      <img class="demo-logo" src="img/loogoproyecto.png" alt="Logo del proyecto">
+      <h3 style="color:var(--texto-claro); font-size:24px; margin-bottom:20px;">Acceso al Sistema Biométrico en Vivo</h3>
+      <a href="https://sistema-biometrico-1.onrender.com/login.jsp" target="_blank" class="btn-demo-estiloso">
+        <i class="fas fa-fingerprin"></i> Iniciar Demostración del Sistema
+      </a>
+    </div>
+ </main>
+ <div class="pie"><span>08 / 10</span><div class="nav"><button onclick="prev()">←</button><button onclick="next()">→</button></div></div>
+</section>
+
+<!-- SLIDE 9: CONCLUSIÓN -->
+<section class="slide interna">
+ <header class="cabecera"><img class="logos-gob" src="logos_institucionales.png"><img class="logo-cta" src="ctalogo.png"></header>
+ <div class="titulo-seccion">CONCLUSIÓN</div>
+ <main class="contenido">
+   <div class="texto-principal">
+     El desarrollo de esta plataforma web demuestra que la integración de tecnología biométrica con la automatización de la liquidación de salarios elimina por completo la brecha operativa entre el registro de entradas/salidas y el área contable, garantizando transparencia, seguridad y eficiencia en la gestión del talento humano.
+   </div>
+ </main>
+ <div class="pie"><span>09 / 10</span><div class="nav"><button onclick="prev()">←</button><button onclick="next()">→</button></div></div>
+</section>
+
+<!-- SLIDE 10: GRACIAS / FINAL -->
+<section class="slide interna final">
+ <header class="cabecera"><img class="logos-gob" src="logos_institucionales.png"><img class="logo-cta" src="ctalogo.png"></header>
+ <main class="contenido">
+   <h1 class="gracias">¡MUCHAS GRACIAS!</h1>
+   <p style="color:var(--texto-secundario); font-size:22px; margin-top:15px;">¿Preguntas o comentarios?</p>
+   <div><a href="index.html" class="volver">Volver al Inicio</a></div>
+ </main>
+ <div class="pie"><span>10 / 10</span><div class="nav"><button onclick="prev()">←</button></div></div>
+</section>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+
+function showSlide(index) {
+  slides[current].classList.remove('active');
+  current = (index + slides.length) % slides.length;
+  slides[current].classList.add('active');
+}
+
+function next() { showSlide(current + 1); }
+function prev() { showSlide(current - 1); }
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') next();
+  if (e.key === 'ArrowLeft') prev();
+});
+</script>
+
+</body>
+</html>
